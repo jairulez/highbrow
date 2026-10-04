@@ -89,6 +89,18 @@ footer{padding:36px 0 48px;font-size:14px;color:var(--mut);border-top:1px solid 
  .rung{grid-template-columns:1fr}.rung .bar{grid-row:auto;width:100%;height:8px;min-height:0;margin-bottom:6px}
 }
 @media(min-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}}
+.qa{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 22px}
+.qa label{display:block;margin-bottom:6px}
+.qa input[type=text]{width:100%;padding:13px 14px;font-size:16px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.qa .res{margin-top:18px;padding:16px;border-radius:12px;background:#f1eee5}
+.qa .res p{margin-top:6px}
+.qa .res a{color:var(--leafd);font-weight:600}
+.qa .warn{background:#fff4e0}
+.qa-fine{font-size:13px;color:var(--mut);margin-top:12px}
+.qa .item{border-top:1px solid var(--line);padding:14px 0}
+.qa .item b{display:block}
+.qa .item span{font-size:13px;color:var(--mut)}
+.qa .btn.alt{background:var(--ink);color:#fff;margin-top:12px}
 </style>
 </head>
 <body>
@@ -180,6 +192,25 @@ footer{padding:36px 0 48px;font-size:14px;color:var(--mut);border-top:1px solid 
  </div>
 </section>
 
+<section id="ask" style="padding-top:0">
+ <div class="wrap">
+  <div class="qa">
+   <h2>Ask the research</h2>
+   <p class="sub">Type a question. If it matches a study on this page, you get a short plain summary with the source. If not, you can send it to a human reviewer. No AI makes up answers here.</p>
+   <form id="qa-form" autocomplete="off">
+    <label for="qa-q"><b>Your question</b></label>
+    <input id="qa-q" type="text" maxlength="200" placeholder="e.g. Is CBD addictive?">
+    <input id="qa-hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+    <button class="btn" type="submit" style="margin-top:10px">Ask</button>
+   </form>
+   <div id="qa-out" aria-live="polite"></div>
+   <p class="qa-fine">Education only. Not medical advice. Please do not include your name, phone number, email or health details. Questions sent for review are shown publicly below only if a reviewer approves them, with the question text only.</p>
+   <h3 style="margin-top:34px">Questions answered so far</h3>
+   <div id="qa-board"><p class="qa-fine">Loading...</p></div>
+  </div>
+ </div>
+</section>
+
 <footer>
  <div class="wrap">
   <div class="legal">
@@ -210,6 +241,78 @@ footer{padding:36px 0 48px;font-size:14px;color:var(--mut);border-top:1px solid 
  }
 })();
 </script>
+<script>
+(function(){
+ var FORM="https://docs.google.com/forms/d/e/1FAIpQLSdSPrF1k3bdOW0ns3k-WqBxb6IkK5uHFy5u-9HSgOa7uNQNiQ/formResponse";
+ var FIELD="entry.75645414";
+ var CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vTVFFKwwX6d-IHD2Rx7F_IoEvABYwlDUGBd_1b2d20QbKVGNcIhzYZbAknBTFI-1IsVt9H7AjpBs8i8/pub?gid=708048702&single=true&output=csv";
+ var CORPUS=[{"id":"ecs","topic":"Endocannabinoid system","keys":["endocannabinoid","system","receptor","receptors","cb1","cb2","anandamide","2-ag","body","own","natural"],"answer":"A 2016 review explains that the body makes its own cannabinoids (anandamide and 2-AG) and has receptors (CB1 and CB2) for them. This system helps brain cells adjust their signals.","tag":"STRONG","cite":"Lu HC & Mackie K (2016). Biol Psychiatry.","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC4789136/"},{"id":"anandamide","topic":"Anandamide discovery","keys":["anandamide","discovered","discovery","brain","molecule","1992","pig","first"],"answer":"In 1992 researchers screened pig brain tissue for a natural molecule that fits the cannabinoid receptor. They found one and named it anandamide, the first known endocannabinoid.","tag":"STRONG","cite":"Devane WA, et al. (1992). Science.","url":"https://doi.org/10.1126/science.1470919"},{"id":"thcvcbd","topic":"THC vs CBD","keys":["thc","cbd","difference","high","psychoactive","different","molecule","molecules","cb1"],"answer":"A pharmacology review found that THC partly switches on the CB1 and CB2 receptors, and CB1 drives the high. CBD acts very differently at the same receptors.","tag":"STRONG","cite":"Pertwee RG (2008). Br J Pharmacol.","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC2219532/"},{"id":"who","topic":"Dependence and CBD","keys":["addictive","addiction","hooked","dependence","habit","abuse","who","cbd"],"answer":"The WHO Expert Committee on Drug Dependence reviewed pure CBD in 2018. It wrote that in humans CBD \"exhibits no effects indicative of any abuse or dependence potential\". This is about pure CBD, not cannabis.","tag":"STRONG","cite":"WHO ECDD (2018). CBD Critical Review Report.","url":"https://cdn.who.int/media/docs/default-source/controlled-substances/whocbdreportmay2018-2.pdf"},{"id":"mental","topic":"Mental health evidence","keys":["anxiety","depression","adhd","ptsd","psychosis","mental","health","evidence","tourette"],"answer":"A review of 83 studies in Lancet Psychiatry found scarce evidence that cannabinoids improve depression, anxiety disorders, ADHD, Tourette syndrome, PTSD or psychosis.","tag":"STRONG","cite":"Black N, et al. (2019). Lancet Psychiatry.","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC6949116/"},{"id":"speaking","topic":"Public-speaking anxiety trial","keys":["public","speaking","social","anxiety","presentation","bergamaschi","trial","brazil"],"answer":"In a small trial, 24 people with social anxiety did a simulated public-speaking test after one CBD dose or a placebo. Anxiety rose less in the CBD group. Twenty-four people is small, so the result is tagged MODERATE.","tag":"MODERATE","cite":"Bergamaschi MM, et al. (2011). Neuropsychopharmacology.","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC3079847/"},{"id":"sleep","topic":"Sleep case series","keys":["sleep","insomnia","awake","shannon","clinic","case","series"],"answer":"A chart review of 72 adults at a US clinic found sleep scores improved for about two-thirds in month one, then went up and down. There was no placebo group, so this is EARLY evidence, not proof.","tag":"EARLY","cite":"Shannon S, et al. (2019). Perm J.","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC6326553/"},{"id":"epilepsy","topic":"Dravet syndrome trial","keys":["epilepsy","seizure","seizures","dravet","nejm","fda","trial","children"],"answer":"A double-blind trial in children and young adults with Dravet syndrome, a rare severe epilepsy, found CBD cut convulsive seizures more than placebo, with more side effects including abnormal liver tests.","tag":"STRONG","cite":"Devinsky O, et al. (2017). N Engl J Med.","url":"https://doi.org/10.1056/NEJMoa1611618"},{"id":"pain","topic":"Chronic pain review","keys":["pain","chronic","national","academies","review","cannabinoids"],"answer":"A US National Academies committee concluded there is substantial evidence that cannabis is an effective treatment for chronic pain in adults, with modest effects. It covers cannabis and cannabinoids as a group, not CBD alone.","tag":"STRONG","cite":"NASEM (2017). Health Effects of Cannabis and Cannabinoids, Conclusion 4-1.","url":"https://www.nationalacademies.org/read/24625/chapter/2"},{"id":"label","topic":"Product label accuracy","keys":["label","labels","accurate","truth","lab","tested","products","mislabelled","real"],"answer":"US researchers tested 84 CBD products bought online in 2017. About 31% matched the CBD amount on the label, and THC was found in 18 of them. This is US data from 2017.","tag":"MODERATE","cite":"Bonn-Miller MO, et al. (2017). JAMA.","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC5818782/"},{"id":"liver","topic":"Liver enzymes","keys":["liver","safe","safety","harmless","natural","side","effects","enzymes","alt"],"answer":"In 16 healthy adults on high daily CBD doses for about 3.5 weeks, 7 had liver enzyme (ALT) levels above normal. It was a small open-label study, and the researchers said doctors should watch for this.","tag":"EARLY","cite":"Watkins PB, et al. (2021). Clin Pharmacol Ther.","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC8246741/"},{"id":"interactions","topic":"Drug interactions","keys":["interaction","interactions","medicine","medicines","drug","drugs","clobazam","valproate","together","levels"],"answer":"In patients taking CBD with standard epilepsy medicines, blood levels of several drugs, including clobazam, changed. Liver tests were abnormal in some patients taking valproate. The researchers stressed monitoring.","tag":"MODERATE","cite":"Gaston TE, et al. (2017). Epilepsia.","url":"https://doi.org/10.1111/epi.13852"},{"id":"driving","topic":"Driving after THC vs CBD","keys":["driving","drive","car","road","impairment","impaired","lane","highway"],"answer":"In a real-highway study of 26 people, THC-dominant and mixed THC/CBD cannabis worsened lane control 40 to 100 minutes later. CBD-dominant cannabis did not differ from placebo.","tag":"MODERATE","cite":"Arkell TR, et al. (2020). JAMA.","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC7709000/"},{"id":"entourage","topic":"Entourage effect","keys":["entourage","full","spectrum","terpenes","together","synergy","whole","plant"],"answer":"A 2011 review proposed that cannabis terpenes and cannabinoids might work together (the \"entourage effect\") and described how to test it. The paper itself says \"if proven\". It is an idea, not settled science.","tag":"EARLY","cite":"Russo EB (2011). Br J Pharmacol.","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC3165946/"}];
+ var STOP=new Set("what is are the a an of to in on for and or does do how why can it its this that about with me my you your i be as at by from".split(" "));
+ var RULES=[
+  {r:"dosing",re:/\b(dose|dosage|dosing|mg|milligram|milligrams|how much|how many|how often|drops|gummies|capsule|capsules|per day|daily amount|microdos\w*)\b/i,m:"I can only explain what published studies found. I cannot give doses or amounts. Ask a doctor."},
+  {r:"personal medical advice",re:/\b(should i|can i take|can i use|can i give|is it ok for me|is it safe for me|my (mother|father|mom|dad|child|son|daughter|baby|wife|husband|friend)|i have|i am (suffering|diagnosed)|i suffer|help me with my|cure|cures|treat|treats|heal|heals|prescribe|prescription for)\b/i,m:"I cannot give medical advice or say what to take or use. This site only summarises published research. Please talk to a qualified doctor about your situation."},
+  {r:"buying or sourcing",re:/\b(buy|purchase|order|price|cost|where (to|can i) (get|find)|shop|store|brand|brands|seller|sell|supplier|online|delivery|discount|best product|recommend\w*)\b/i,m:"This site is for education only. It does not sell, recommend or link to any products."},
+  {r:"how to use or make",re:/\b(how to (use|make|grow|smoke|vape|extract|cook|consume)|recipe|grow|smoke|vape|edible|edibles|extract)\b/i,m:"I cannot give advice on using, growing or making cannabis products. Cannabis laws in India are strict."}
+ ];
+ var PII=/[\w.+-]+@[\w-]+\.[\w.]+|(\d[\s-]?){7,}|https?:\/\//i;
+ function norm(s){return s.toLowerCase().replace(/[^a-z0-9\- ]/g," ").split(/\s+/).filter(function(w){return w&&!STOP.has(w)})}
+ function ask(q){
+  q=q.trim();
+  if(q.length<4)return{k:"short",m:"Please type a full question (at least a few words)."};
+  if(q.length>200)return{k:"short",m:"Please keep the question under 200 characters."};
+  if(PII.test(q))return{k:"blocked",r:"personal details",m:"Please remove phone numbers, emails and links. Do not include personal details."};
+  for(var i=0;i<RULES.length;i++)if(RULES[i].re.test(q))return{k:"blocked",r:RULES[i].r,m:RULES[i].m};
+  var w=norm(q),best=-1,bs=0;
+  CORPUS.forEach(function(e,i){var keys=new Set(e.keys),s=0;w.forEach(function(x){if(keys.has(x))s+=1});w.forEach(function(x){if(x.length>3&&e.topic.toLowerCase().indexOf(x)>-1)s+=.5});if(s>bs){bs=s;best=i}});
+  if(best<0||bs<1.5)return{k:"nomatch",m:"This is outside the research on this page, so I will not guess. You can send it to a human reviewer, who may add a sourced answer."};
+  return{k:"answer",e:CORPUS[best]};
+ }
+ function el(t,c,x){var n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n}
+ var out=document.getElementById("qa-out"),inp=document.getElementById("qa-q");
+ function send(q){
+  var last=0;try{last=+localStorage.getItem("hb_last")||0}catch(e){}
+  if(Date.now()-last<60000){out.appendChild(el("p","qa-fine","Please wait a minute before sending another question."));return}
+  if(document.getElementById("qa-hp").value)return;
+  var fd=new FormData();fd.append(FIELD,q);
+  fetch(FORM,{method:"POST",mode:"no-cors",body:fd}).then(function(){
+   try{localStorage.setItem("hb_last",String(Date.now()))}catch(e){}
+   out.textContent="";var r=el("div","res");r.appendChild(el("b",null,"Sent to the reviewer."));r.appendChild(el("p",null,"Thank you. If it is approved and answered with a source, it will appear in the list below."));out.appendChild(r);
+  }).catch(function(){out.appendChild(el("p","qa-fine","Could not send right now. Please try again later."))});
+ }
+ document.getElementById("qa-form").addEventListener("submit",function(ev){
+  ev.preventDefault();out.textContent="";
+  if(document.getElementById("qa-hp").value)return;
+  var q=inp.value,r=ask(q),box=el("div","res");
+  box.appendChild(el("b",null,q.trim().slice(0,200)));
+  if(r.k==="answer"){
+   box.appendChild(el("p",null,r.e.answer));
+   var p=el("p",null,"Evidence: "+r.e.tag+". Source: "+r.e.cite+" ");var a=el("a",null,"read the study");a.href=r.e.url;a.target="_blank";a.rel="noopener";p.appendChild(a);box.appendChild(p);
+   box.appendChild(el("p","qa-fine","Education only. Not medical advice. Talk to a doctor."));
+  }else if(r.k==="blocked"){
+   box.className="res warn";box.appendChild(el("p",null,r.m));box.appendChild(el("p","qa-fine","This question was not sent anywhere and will not be shown publicly."));
+  }else if(r.k==="short"){
+   box.appendChild(el("p",null,r.m));
+  }else{
+   box.appendChild(el("p",null,r.m));
+   var b=el("button","btn alt","Send to reviewer");b.type="button";b.addEventListener("click",function(){b.disabled=true;send(q.trim())});box.appendChild(b);
+   box.appendChild(el("p","qa-fine","By sending, you agree your question text may be shown publicly if approved. Nothing else is collected."));
+  }
+  out.appendChild(box);
+ });
+ function parseCSV(t){var rows=[],row=[],f="",q=false;for(var i=0;i<t.length;i++){var c=t[i];if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}else if(c==='"')q=true;else if(c===","){row.push(f);f=""}else if(c==="\n"||c==="\r"){if(c==="\r"&&t[i+1]==="\n")i++;row.push(f);rows.push(row);row=[];f=""}else f+=c}
+  if(f||row.length){row.push(f);rows.push(row)}return rows}
+ var board=document.getElementById("qa-board");
+ fetch(CSV+"&t="+Date.now()).then(function(r){return r.text()}).then(function(t){
+  var rows=parseCSV(t).slice(1).filter(function(r){return r[0]&&r[0].trim()&&r[0]!=="#N/A"&&r[1]&&r[1].trim()});
+  board.textContent="";
+  if(!rows.length){board.appendChild(el("p","qa-fine","No community questions have been answered yet. Be the first to ask."));return}
+  rows.forEach(function(r){var d=el("div","item");d.appendChild(el("b",null,r[0]));d.appendChild(el("p",null,r[1]));
+   if(r[2]&&r[2].trim()){var s=el("span",null,"Source: ");var u=r[2].trim();if(/^https:\/\//.test(u)){var a=el("a",null,u);a.href=u;a.target="_blank";a.rel="noopener";s.appendChild(a)}else s.appendChild(document.createTextNode(u));d.appendChild(s)}
+   board.appendChild(d)});
+ }).catch(function(){board.textContent="";board.appendChild(el("p","qa-fine","The list could not load right now."))});
+})();
+</script>
+
 </body>
 </html>
 
